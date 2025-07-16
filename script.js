@@ -121,7 +121,6 @@
 
         function calculateScore() {
             const studentName = document.getElementById('student-name').value;
-            const grade = document.getElementById('grade').value;
             
             let totalScore = 0;
             const answers = [];
@@ -171,7 +170,6 @@
             
             return {
                 studentName,
-                grade,
                 totalScore: Math.round(totalScore),
                 answers,
                 maxScore: questions.reduce((sum, q) => sum + q.points, 0),
@@ -185,7 +183,6 @@
             studentInfoEl.innerHTML = `
                 <div class="row">
                     <div class="col-md-3"><strong>Name:</strong> ${results.studentName}</div>
-                    <div class="col-md-3"><strong>Grade:</strong> ${results.grade}</div>
                     <div class="col-md-6"><strong>Time:</strong> ${new Date().toLocaleString()}</div>
                 </div>
             `;
