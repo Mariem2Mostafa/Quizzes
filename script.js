@@ -177,6 +177,29 @@
             };
         }
 
+
+// Update the saveResultsToFirebase function
+async function saveResultsToFirebase(results) {
+    try {
+        // Import necessary Firestore functions
+        const { collection, addDoc, serverTimestamp } = await import(
+            "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js"
+        );
+
+        // Use the initialized db from window
+        await addDoc(collection(db, "quizResults"), {
+            studentName: results.studentName,
+            totalScore: results.totalScore,
+            maxScore: results.maxScore,
+            timestamp: serverTimestamp(),
+            answers: results.answers
+        });
+        return true;
+    } catch (error) {
+        console.error("Error saving results: ", error);
+        return false;
+    }
+}
         // Show results
         function showResults(results) {
             // Display student info
@@ -187,6 +210,12 @@
                 </div>
             `;
             
+              answersFeedback.innerHTML += `
+        <div class="saving-indicator mt-3">
+            <i class="fas fa-spinner fa-spin"></i> 
+            <span>Saving Results...</span>
+        </div>
+    `;
             // Display score
             scoreEl.textContent = results.totalScore;
             totalEl.textContent = results.maxScore;
@@ -230,22 +259,56 @@
             resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Event Listeners
-        quizForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const results = calculateScore();
-            showResults(results);
-        });
+      // Event Listeners
+// Update the submit event listener
+quizForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const studentName = document.getElementById('student-name').value;
+    
+    if (!studentName) {
+        alert('Please enter your name.');
+        return;
+    }
+    
+    const results = calculateScore();
+    showResults(results);
+    
+    try {
+        const savingIndicator = document.querySelector('.saving-indicator');
+        const saveSuccess = await saveResultsToFirebase(results);
+        
+        if (saveSuccess) {
+            savingIndicator.innerHTML = `<i class="fas fa-check-circle text-success"></i> Results saved successfully!`;
+            
+            setTimeout(() => {
+                resultsSection.style.display = 'none';
+                thankYouEl.style.display = 'block';
+                thankYouEl.scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const savingIndicator = document.querySelector('.saving-indicator');
+        savingIndicator.innerHTML = `
+            <i class="fas fa-exclamation-triangle text-danger"></i>
+            Error saving results: ${error.message}
+        `;
+    }
+});
 
-        restartBtn.addEventListener('click', function() {
-            location.reload();
-        });
+restartBtn.addEventListener('click', function() {
+    location.reload();
+});
 
-        thankYouRestartBtn.addEventListener('click', function() {
-            location.reload();
-        });
+thankYouRestartBtn.addEventListener('click', function() {
+    location.reload();
+});
 
-        // Initialize the quiz
-        document.addEventListener('DOMContentLoaded', function() {
-            renderQuestions();
-        });
+// Initialize the quiz
+document.addEventListener('DOMContentLoaded', function() {
+    renderQuestions();
+    
+    // إخفاء شاشة النتائج ورسالة الشكر عند التحميل
+    resultsSection.style.display = 'none';
+    thankYouEl.style.display = 'none';
+});

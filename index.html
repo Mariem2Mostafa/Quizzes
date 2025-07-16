@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+
+
 <body>
     <div class="container">
         <div class="header">
@@ -63,6 +65,28 @@
         </div>
     </div>
 
+   <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+  // Add Firestore import
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6vDjLI2-Sl_y3k5toUkKORBQ9vlIbKzc",
+    authDomain: "quizes-d99ea.firebaseapp.com",
+    projectId: "quizes-d99ea",
+    storageBucket: "quizes-d99ea.firebasestorage.app",
+    messagingSenderId: "913758109587",
+    appId: "1:913758109587:web:be79a649d80a8f3014f266",
+    measurementId: "G-14KPJDJHML"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  // Initialize Firestore and make it globally accessible
+  window.db = getFirestore(app);
+</script>
     <script src="script.js"></script>
 </body>
 </html>
