@@ -41,7 +41,7 @@
                     "3. Error",
                     "4. List=[1,\"Apple\",True,[1,2,3,4]]"
                 ],
-                "answer": "3. Error",
+                "answer": "3. True",
                 "points": 1
             },
             {
