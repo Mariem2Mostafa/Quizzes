@@ -83,6 +83,9 @@
         const restartBtn = document.getElementById('restart-btn');
         const thankYouRestartBtn = document.getElementById('thank-you-restart');
 
+
+
+        // Render Questions
         function renderQuestions() {
             let html = '';
             
